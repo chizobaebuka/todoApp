@@ -1,8 +1,10 @@
+import { TodoWrapper } from './components/TodoWrapper';
+
 const App = () => {
   return (
-    <div className="text-3xl font-bold underline">
-      Hello World!
+    <div className='bg-green h-screen'>
+      <TodoWrapper />
     </div>
   )
 }
-export default App
+export default App;
