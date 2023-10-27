@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Todo from './Todo';
 import TodoForm from './TodoForm';
-import { v4 as uuidv4 } from 'uuid';
 import EditTodoForm from './EditTodoForm';
+import { v4 as uuidv4 } from 'uuid';
 
 interface TodoItem {
     id: string;
@@ -14,7 +14,6 @@ interface TodoItem {
 export const TodoWrapper: React.FC = () => {
     const [todos, setTodos] = useState<TodoItem[]>([]);
 
-    // Load todo items from local storage when the component mounts
     useEffect(() => {
         const savedTodos = localStorage.getItem('todos');
         if (savedTodos) {
@@ -22,7 +21,6 @@ export const TodoWrapper: React.FC = () => {
         }
     }, []);
 
-    // Function to save todo items to local storage
     const saveTodosToLocalStorage = (newTodos: TodoItem[]) => {
         localStorage.setItem('todos', JSON.stringify(newTodos));
     };
@@ -37,13 +35,13 @@ export const TodoWrapper: React.FC = () => {
 
         const newTodos = [...todos, newTodo];
         setTodos(newTodos);
-        saveTodosToLocalStorage(newTodos); // Save to local storage
+        saveTodosToLocalStorage(newTodos);
     };
 
     const deleteTodo = (id: string) => {
         const newTodos = todos.filter((todo) => todo.id !== id);
         setTodos(newTodos);
-        saveTodosToLocalStorage(newTodos); // Save to local storage
+        saveTodosToLocalStorage(newTodos);
     };
 
     const toggleComplete = (id: string) => {
@@ -51,7 +49,7 @@ export const TodoWrapper: React.FC = () => {
             todo.id === id ? { ...todo, completed: !todo.completed } : todo
         );
         setTodos(newTodos);
-        saveTodosToLocalStorage(newTodos); // Save to local storage
+        saveTodosToLocalStorage(newTodos);
     };
 
     const editTodo = (id: string) => {
@@ -68,7 +66,13 @@ export const TodoWrapper: React.FC = () => {
                 todo.id === id ? { ...todo, task, isEditing: !todo.isEditing } : todo
             )
         );
-        saveTodosToLocalStorage(todos); // Save to local storage
+        saveTodosToLocalStorage(todos);
+    };
+
+    const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text)
+            .then(() => alert('Task copied to clipboard'))
+            .catch((err) => alert('Failed to copy task: ' + err));
     };
 
     return (
@@ -83,13 +87,10 @@ export const TodoWrapper: React.FC = () => {
                         todo.isEditing ? (
                             <EditTodoForm editTodo={editTask} task={todo} key={todo.id} />
                         ) : (
-                            <Todo
-                                key={todo.id}
-                                task={todo}
-                                deleteTodo={deleteTodo}
-                                editTodo={editTodo}
-                                toggleComplete={toggleComplete}
-                            />
+                            <div key={todo.id} className="flex items-center justify-between">
+                                <Todo task={todo} deleteTodo={deleteTodo} editTodo={editTodo} toggleComplete={toggleComplete} />
+                                <button className="text-blue-500" onClick={() => copyToClipboard(todo.task)}>Copy</button>
+                            </div>
                         )
                     )}
                 </div>
