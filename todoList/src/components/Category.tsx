@@ -1,24 +1,19 @@
+// CategoryList.tsx
 import React, { useState } from 'react';
 
 interface Category {
     id: string;
     name: string;
-    todos: TodoItem[];
-}
-
-interface TodoItem {
-    id: string;
-    task: string;
-    completed: boolean;
-    isEditing: boolean;
 }
 
 interface CategoryListProps {
     categories: Category[];
     addCategory: (name: string) => void;
+    deleteCategory: (id: string) => void;
+    selectCategory: (id: string) => void;
 }
 
-const CategoryList: React.FC<CategoryListProps> = ({ categories, addCategory }) => {
+const CategoryList: React.FC<CategoryListProps> = ({ categories, addCategory, deleteCategory, selectCategory }) => {
     const [newCategoryName, setNewCategoryName] = useState<string>('');
 
     const handleCategoryAdd = () => {
@@ -48,7 +43,22 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, addCategory }) 
             </div>
             <ul className="list-disc ml-4">
                 {categories.map((category) => (
-                    <li key={category.id}>{category.name}</li>
+                    <li
+                        key={category.id}
+                        className="cursor-pointer hover:underline"
+                        onClick={() => selectCategory(category.id)}
+                    >
+                        {category.name}
+                        <button
+                            className="ml-2 text-red-500 hover:text-red-700"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                deleteCategory(category.id);
+                            }}
+                        >
+                            Delete
+                        </button>
+                    </li>
                 ))}
             </ul>
         </div>
