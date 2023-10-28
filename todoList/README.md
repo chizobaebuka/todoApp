@@ -60,5 +60,9 @@ Deleting a Task: Click the "Delete" icon button to remove a task.
 
 Copying a Task: Click the "Copy" button to copy the task text to your clipboard.
 
+Creating Categories: In the "Categories" section, enter a category name and press "Add Category."
+
+Adding Tasks to Categories: To add a task to a specific category, select the category before adding a task.
+
 ## LOCAL STORAGE
 The app uses local storage to persist your tasks and categories, so your data will be saved even after you close the browser.
